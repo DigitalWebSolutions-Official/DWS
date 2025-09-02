@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
 </head>
+
 <body>
     <header>
         <nav class="navbar">
@@ -40,8 +42,9 @@
                 <div class="contact-content">
                     <div class="contact-info">
                         <h3>Ready to start your project?</h3>
-                        <p>Let's discuss how we can bring your digital vision to life. We're here to answer your questions and provide a free consultation.</p>
-                        
+                        <p>Let's discuss how we can bring your digital vision to life. We're here to answer your
+                            questions and provide a free consultation.</p>
+
                         <div class="contact-methods">
                             <div class="contact-method">
                                 <h4>📞 Phone</h4>
@@ -56,14 +59,15 @@
                                 <p>Within 24 hours</p>
                             </div>
                         </div>
-                        
+
                         <div class="tagline-options">
                             <p><strong>Where Ideas Meet Innovation</strong></p>
                             <p><strong>Your Web, Perfected</strong></p>
                         </div>
-                        
+
                         <div class="consultation-note">
-                            <p><strong>Free 30-minute consultation</strong> - Let's discuss your project goals and how we can help achieve them.</p>
+                            <p><strong>Free 30-minute consultation</strong> - Let's discuss your project goals and how
+                                we can help achieve them.</p>
                         </div>
                     </div>
                     <form class="contact-form">
@@ -102,6 +106,52 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDzhlLKg387N6Nw4SJxpW31ki9n14Wltas",
+            authDomain: "dws-official.firebaseapp.com",
+            projectId: "dws-official",
+            storageBucket: "dws-official.firebasestorage.app",
+            messagingSenderId: "946044346175",
+            appId: "1:946044346175:web:e1c96e7dd8da81b35dbd8a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.querySelector('.contact-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const name = this.querySelector('input[type="text"]').value;
+            const email = this.querySelector('input[type="email"]').value;
+            const plan = this.querySelector('select').value;
+            const message = this.querySelector('textarea').value;
+
+            if (!name || !email || !plan || !message) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            try {
+                await addDoc(collection(db, 'contacts'), {
+                    name: name,
+                    email: email,
+                    plan: plan,
+                    message: message,
+                    timestamp: new Date()
+                });
+
+                alert(`Thank you, ${name}! Your message has been sent successfully.`);
+                this.reset();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Sorry, there was an error sending your message. Please try again.');
+            }
+        });
+    </script>
 </body>
+
 </html>
